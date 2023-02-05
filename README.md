@@ -17,3 +17,8 @@ Do note, quite a few of these parts have colors laid on top of their textures th
 
 # Known Issues
 - `R Stripes` texture is broken and will not save to the parts. I have no idea why. I have tried everything in vain to fix it. All other vanilla textures, including all hidden ones, have been tested and work. Until further notice this bug will remain.
+
+# How to Use
+- Download `Texturable.dll` from the latest official release.
+- Click the "Open Mods Folder" button in-game.
+- Drag and drop the DLL, then restart the game.
