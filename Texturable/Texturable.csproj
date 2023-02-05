@@ -454,6 +454,7 @@
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="src\AddModules.cs" />
+        <Compile Include="src\CheckSkinModule.cs" />
         <Compile Include="src\Main.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

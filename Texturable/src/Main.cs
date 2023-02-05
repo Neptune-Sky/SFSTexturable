@@ -1,5 +1,11 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HarmonyLib;
 using ModLoader;
+using SFS;
+using UnityEngine;
+using ModLoader.Helpers;
+using ModLoader.IO;
 
 namespace Texturable
 {
@@ -10,7 +16,7 @@ namespace Texturable
         public override string DisplayName => "Texturable";
         public override string Author => "NeptuneSky";
         public override string MinimumGameVersionNecessary => "1.5.9.8";
-        public override string ModVersion => "v1.0.0";
+        public override string ModVersion => "v0.1.1-beta";
         public override string Description => "A simple mod that makes more parts textureable.";
 
         // This initializes the patcher. This is required if you use any Harmony patches.
@@ -19,17 +25,43 @@ namespace Texturable
         public override void Load()
         {
             // This tells the loader what to run when your mod is loaded.
+            AddModules.Execute();
+            Console.commands.Add(Command);
         }
 
         public override void Early_Load()
         {
-            // This method runs before anything from the game is loaded. This is where you should apply your patches, as shown below.
-
-            // The patcher uses an ID formatted like a web domain.
             patcher = new Harmony("Neptune.Texturable.Mod");
+        }
 
-            // This pulls your Harmony patches from everywhere in the namespace and applies them.
-            patcher.PatchAll();
+        private bool Command(string str)
+        {
+            List<string> splitCommand = str.Split(" ").ToList();
+            string command = splitCommand[0];
+            List<string> args;
+            if (splitCommand.Count < 2)
+            {
+                args = new List<string>();
+            }
+            else
+            {
+                args = splitCommand.GetRange(1, str.Length - 1);
+            }
+            
+            if (command == "skin")
+            {
+                if (args.Count < 1)
+                {
+                    Debug.Log("Not enough args! You must provide the skin to change to.");
+                    return true;
+                }
+                AddModules.checkSkinModules.ForEach(e =>
+                {
+                    e.skinModule.SetTexture(0, Base.partsLoader.colorTextures[args[0]].colorTex);
+                });
+            }
+
+            return false;
         }
     }
 }
