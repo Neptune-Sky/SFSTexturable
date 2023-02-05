@@ -72,9 +72,13 @@ namespace Texturable
                     {
                         part.variablesModule.stringVariables.SetValue("shape_tex", "_", (true, true));
                     }
+
+                    if (!part.variablesModule.boolVariables.Has("disable_vanilla_shading"))
+                    {
+                        part.variablesModule.boolVariables.SetValue("disable_vanilla_shading", false, (true, true));
+                    }
                     
                     skinModule.colorTextureName = CreateRef("color_tex");
-                    Debug.Log(skinModule.colorTextureName.Value);
                     skinModule.shapeTextureName = CreateRef("shape_tex");
 
                     part.GetOrAddComponent<CheckSkinModule>();
