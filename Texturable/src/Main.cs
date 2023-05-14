@@ -35,30 +35,20 @@ namespace Texturable
 
         private bool Command(string str)
         {
-            List<string> splitCommand = str.Split(" ").ToList();
+            var splitCommand = str.Split(' ').ToList();
             string command = splitCommand[0];
-            List<string> args;
-            if (splitCommand.Count < 2)
+            var args = splitCommand.Count < 2 ? new List<string>() : splitCommand.GetRange(1, str.Length - 1);
+
+            if (command != "skin") return false;
+            if (args.Count < 1)
             {
-                args = new List<string>();
+                Debug.Log("Not enough args! You must provide the skin to change to.");
+                return true;
             }
-            else
+            AddModules.checkSkinModules.ForEach(e =>
             {
-                args = splitCommand.GetRange(1, str.Length - 1);
-            }
-            
-            if (command == "skin")
-            {
-                if (args.Count < 1)
-                {
-                    Debug.Log("Not enough args! You must provide the skin to change to.");
-                    return true;
-                }
-                AddModules.checkSkinModules.ForEach(e =>
-                {
-                    e.skinModule.SetTexture(0, Base.partsLoader.colorTextures[args[0]].colorTex);
-                });
-            }
+                e.skinModule.SetTexture(0, Base.partsLoader.colorTextures[args[0]].colorTex);
+            });
 
             return false;
         }

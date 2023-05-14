@@ -19,51 +19,52 @@ namespace Texturable
         private VariablesModule variables;
 
         private bool toggle;
-        private List<ColorSaver> defaultColorsList = new List<ColorSaver>();
+        private readonly List<ColorSaver> defaultColorsList = new();
 
-        void Start()
+        private void Start()
         {   
             AddModules.checkSkinModules.Add(this);
-            if (TryGetComponent(out skinModule))
+            if (!TryGetComponent(out skinModule)) return;
+            variables = GetComponent<VariablesModule>();
+            var colorTexture = "";
+            var shapeTexture = "";
+            try
             {
-                variables = GetComponent<VariablesModule>();
-                string colorTexture = "";
-                string shapeTexture = "";
-                try
-                {
-                    colorTexture = variables.stringVariables.GetValue("color_tex");
-                    shapeTexture = variables.stringVariables.GetValue("shape_tex");
-                }
-                catch (Exception) {}
-                if (!string.IsNullOrEmpty(colorTexture))
-                {
-                    skinModule.SetTexture(0, Base.partsLoader.colorTextures[colorTexture].colorTex);
-                }
-
-                if (!string.IsNullOrEmpty(shapeTexture))
-                {
-                    skinModule.SetTexture(1, Base.partsLoader.shapeTextures[shapeTexture].shapeTex);
-                }
-                skinModule.meshModules.ForEach(e =>
-                {
-                    defaultColorsList.Add(new ColorSaver
-                    {
-                        mode = e.colors.mode,
-                        color = e.colors.color.colorBasic,
-                    });
-                });
-                if (variables.boolVariables.GetValue("disable_vanilla_shading"))
-                {
-                    skinModule.meshModules.ForEach(e =>
-                    {
-                        e.colors.mode = Mode.Single;
-                        e.colors.color.colorBasic = Color.white;
-                        e.GenerateMesh();
-                    });
-                    toggle = true;
-                }
-                
+                colorTexture = variables.stringVariables.GetValue("color_tex");
+                shapeTexture = variables.stringVariables.GetValue("shape_tex");
             }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            if (!string.IsNullOrEmpty(colorTexture))
+            {
+                skinModule.SetTexture(0, Base.partsLoader.colorTextures[colorTexture].colorTex);
+            }
+
+            if (!string.IsNullOrEmpty(shapeTexture))
+            {
+                skinModule.SetTexture(1, Base.partsLoader.shapeTextures[shapeTexture].shapeTex);
+            }
+            skinModule.meshModules.ForEach(e =>
+            {
+                defaultColorsList.Add(new ColorSaver
+                {
+                    mode = e.colors.mode,
+                    color = e.colors.color.colorBasic,
+                });
+            });
+            if (!variables.boolVariables.GetValue("disable_vanilla_shading")) return;
+            
+            skinModule.meshModules.ForEach(e =>
+            {
+                e.colors.mode = Mode.Single;
+                e.colors.color.colorBasic = Color.white;
+                e.GenerateMesh();
+            });
+            toggle = true;
+            
         }
 
         private void OnDestroy()
@@ -86,7 +87,7 @@ namespace Texturable
 
             if (!variables.boolVariables.GetValue("disable_vanilla_shading") && toggle)
             {
-                for (int i = 0; i < skinModule.meshModules.Length; i++)
+                for (var i = 0; i < skinModule.meshModules.Length; i++)
                 {
                     PipeMesh mesh = skinModule.meshModules[i];
                     mesh.colors.color.colorBasic = defaultColorsList[i].color;
