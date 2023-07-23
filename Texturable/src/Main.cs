@@ -16,7 +16,7 @@ namespace Texturable
         public override string DisplayName => "Texturable";
         public override string Author => "NeptuneSky";
         public override string MinimumGameVersionNecessary => "1.5.9.8";
-        public override string ModVersion => "v0.2.0-beta";
+        public override string ModVersion => "v0.2.1-beta";
         public override string Description => "A simple mod that makes more parts textureable.";
 
         // This initializes the patcher. This is required if you use any Harmony patches.

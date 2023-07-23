@@ -25,7 +25,16 @@ namespace Texturable
             "Solar Array 3",
             "Probe",
             "Placeholder Battery",
-            "Placeholder RTG"
+            "Placeholder RTG",
+            "RA LES",
+            "R Engine",
+            "RA Retro",
+            "R Engine",
+            "A Separator",
+            "R Separator",
+            "A Base",
+            "A Bulkhead",
+            "A Adapter"
         };
         
         public static List<CheckSkinModule> checkSkinModules = new List<CheckSkinModule>();
